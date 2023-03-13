@@ -1,8 +1,11 @@
 import ethImg from '../assets/eth.jpeg'
+import UserContext, { AuthContext } from './context/UserContext'
 
 const Wallet = () => {
+  const {user}=UserContext(AuthContext)
   return (
     <section className='bg-gray-100 text-gray-900 min-h-screen'>
+    {user && user.emailVerified ? (
       <div className='container flex flex-col justify-center p-6 mx-auto sm:py-12 lg:py-24 lg:flex-row lg:justify-between'>
         <div className='flex items-center justify-center p-6 mt-8 lg:mt-0 h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128'>
           <img
@@ -30,8 +33,18 @@ const Wallet = () => {
           </div>
         </div>
       </div>
-    </section>
-  )
+    ) : (
+      <div className='flex justify-center p-40'>
+        <p className='text-4xl text-center'>
+          Please Verify Your Email.
+          <br />
+          Verification Link Has Been Sent to Your Email Address
+        </p>
+      </div>
+    )}
+  </section>
+)
 }
+
 
 export default Wallet

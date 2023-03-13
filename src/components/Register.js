@@ -1,15 +1,14 @@
-import React from 'react'
-import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import app from '../firebase/firebase.init'
 import { toast } from 'react-toastify';
+import { AuthContext } from './context/UserContext';
 
-const auth = getAuth(app)
 
 const Register = () => {
-  const googleProvider = new GoogleAuthProvider()
-  
-    // signup email and pass 
+  const { createUser, updateName, verifyEmail,signInWithGoogle } = useContext(AuthContext)
+
+
+  // signup email and pass 
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -24,47 +23,47 @@ const Register = () => {
 
     // create account 
 
-    createUserWithEmailAndPassword(auth, email, password)
+    createUser(email, password)
       .then(result => {
         console.log(result.user);
 
         // update name 
-        updateProfile(auth.currentUser, {
-          displayName: name,
-        }).then(() => {
-          toast.success('name update')
-          console.log(auth.currentUser);
-          sendEmailVerification(auth.currentUser)
-            .then(() => {
-              toast.success('please check your email varifacation link ' )
-            });
-        })
-        .catch((error) => {
-          toast.error(error.message)
-        });
+        updateName(name)
+          .then(() => {
+            toast.success('name update')
+           
+
+            verifyEmail()
+              .then(() => {
+                toast.success('please check your email varifacation link ')
+              });
+          })
+          .catch((error) => {
+            toast.error(error.message)
+          });
       })
       .catch(error => console.log(error));
   }
 
   // Google sign in 
 
-  const handleGoogleSignin = () =>{
-    signInWithPopup(auth, googleProvider)
-    .then(result=>{
-      console.log(result.user);
-    })
+  const handleGoogleSignin = () => {
+    signInWithGoogle()
+      .then(result => {
+        console.log(result.user);
+      })
   }
 
-    
+
 
 
   return (
     <div className='flex justify-center items-center pt-8'>
-    <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900'>
-      <div className='mb-8 text-center'>
-        <h1 className='my-3 text-4xl font-bold'>Register</h1>
-        <p className='text-sm text-gray-400'>Create a new account</p>
-      </div>
+      <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900'>
+        <div className='mb-8 text-center'>
+          <h1 className='my-3 text-4xl font-bold'>Register</h1>
+          <p className='text-sm text-gray-400'>Create a new account</p>
+        </div>
         <form
           onSubmit={handleSubmit}
           noValidate=''
@@ -133,8 +132,8 @@ const Register = () => {
         </div>
         <div className='flex justify-center space-x-4'>
           <button
-          onClick={handleGoogleSignin}
-          aria-label='Log in with Google' className='p-3 rounded-sm'>
+            onClick={handleGoogleSignin}
+            aria-label='Log in with Google' className='p-3 rounded-sm'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               viewBox='0 0 32 32'
