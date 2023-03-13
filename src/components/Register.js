@@ -1,14 +1,59 @@
 import React from 'react'
+import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
+import { Link } from 'react-router-dom'
+import app from '../firebase/firebase.init'
+import { toast } from 'react-toastify';
+
+const auth = getAuth(app)
 
 const Register = () => {
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const name = e.target.name.value
+
+
+    const email = e.target.email.value
+
+
+    const password = e.target.password.value
+
+
+    // create account 
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(result => {
+        console.log(result.user);
+
+        // update name 
+        updateProfile(auth.currentUser, {
+          displayName: name,
+        }).then(() => {
+          toast.success('name update')
+          console.log(auth.currentUser);
+          sendEmailVerification(auth.currentUser)
+            .then(() => {
+              toast.success('please check your email varifacation link ' )
+            });
+        })
+        .catch((error) => {
+          toast.error(error.message)
+        });
+      })
+      .catch(error => console.log(error));
+  }
+
+
   return (
-    <div className='flex justify-center items-center pt-8'>
+    <div className='flex justify-items-center pt-8'>
       <div className='flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900'>
         <div className='mb-8 text-center'>
           <h1 className='my-3 text-4xl font-bold'>Register</h1>
           <p className='text-sm text-gray-400'>Create a new account</p>
         </div>
         <form
+          onSubmit={handleSubmit}
           noValidate=''
           action=''
           className='space-y-12 ng-untouched ng-pristine ng-valid'
@@ -104,9 +149,9 @@ const Register = () => {
         </div>
         <p className='px-6 text-sm text-center text-gray-400'>
           Already have an account yet?{' '}
-          <a href='#' className='hover:underline text-gray-600'>
+          <Link to='/login' className='hover:underline text-gray-600'>
             Sign In
-          </a>
+          </Link>
           .
         </p>
       </div>
