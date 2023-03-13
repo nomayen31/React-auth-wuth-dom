@@ -1,21 +1,23 @@
-import { Link } from "react-router-dom"
-import { toast } from "react-toastify"
-import UserContext, { AuthContext } from "./context/UserContext"
+import { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { AuthContext } from '../components/context/UserContext'
 
 const Navbar = () => {
-  const {user, logout} =UserContext(AuthContext)
-  const handleLogout = ()=>{
+  const { user, logout } = useContext(AuthContext)
+
+  const handleLogout = () => {
     logout()
-    .then(toast.warning('user logout'))
-    .catch(error =>console.error(error));
+      .then(toast.warning('User logged out!'))
+      .catch(error => console.log(error))
   }
 
-
+  console.log(user)
   return (
     <header className='text-gray-600 body-font'>
       <div className='container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center'>
-        <Link to="/"
-          href='#'
+        <Link
+          to='/'
           className='flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0'
         >
           <svg
@@ -33,9 +35,10 @@ const Navbar = () => {
           <span className='ml-3 text-xl'>AuthenTech</span>
         </Link>
         <nav className='md:ml-auto flex flex-wrap items-center text-base justify-center'>
-          <Link to="/home" className='mr-5 hover:text-gray-900'>
+          <Link to='/home' className='mr-5 hover:text-gray-900'>
             Home
           </Link>
+
           {user?.email ? (
             <>
               <Link to='/profile' className='mr-5 hover:text-gray-900'>
@@ -67,7 +70,6 @@ const Navbar = () => {
               Login
             </Link>
           )}
-          
         </nav>
       </div>
     </header>
@@ -75,8 +77,3 @@ const Navbar = () => {
 }
 
 export default Navbar
-
-
-
-
-// 38.80
