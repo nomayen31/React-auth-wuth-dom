@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom"
+import Navbar from "./Navbar"
+
 const Home = () => {
   return (
     <section>
@@ -11,26 +14,32 @@ const Home = () => {
             using email password. Powered by Firebase.!
           </p>
           <div className='flex flex-wrap justify-center'>
-            <button
+          <Link to='/profile'>
+           <button
               type='button'
               className='px-8 py-3 m-2 text-lg font-semibold rounded bg-gray-800 hover:bg-gray-700 text-gray-50'
             >
-              Visit Profile
+              profile
             </button>
+           </Link>
 
-            <button
+           <Link to='/login'>
+           <button
               type='button'
               className='px-8 py-3 m-2 text-lg font-semibold rounded bg-gray-800 hover:bg-gray-700 text-gray-50'
             >
               Login
             </button>
+           </Link>
 
-            <button
+          <Link to="/register">
+          <button
               type='button'
               className='px-8 py-3 m-2 text-lg border rounded border-gray-700 text-gray-900'
             >
               Register
             </button>
+          </Link>
           </div>
         </div>
       </div>
